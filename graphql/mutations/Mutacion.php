@@ -20,16 +20,4 @@ function getUserIp(){
     return $ipaddress;
 }
 
-$Login=[
-    'validacion_login'=>[
-        'type'=>$validacionLoginType,
-        'args'=>[
-            'Usuario'=>Type::nonNull(Type::string()),
-            'Contra'=>Type::nonNull(Type::string())
-        ],
-        'resolve'=>function($root,$args){
-            return array("estado"=>false,"id_cuenta"=>0);
-        }
-    ],
-]
 ?>
