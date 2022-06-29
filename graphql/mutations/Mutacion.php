@@ -19,5 +19,16 @@ function getUserIp(){
         $ipaddress = 'UNKNOWN';    
     return $ipaddress;
 }
-
+$Mutacion=[
+    'validacion_login'=>[
+        'type'=>Type::int(),
+        'args'=>[
+            'Usuario'=>Type::nonNull(Type::string()),
+            'Contra'=>Type::nonNull(Type::string())
+        ],
+        'resolve'=>function($root,$args){
+            return 1;
+        }
+    ],
+];
 ?>
