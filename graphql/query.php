@@ -6,7 +6,7 @@ $rootQuery=new ObjectType([
     'name'=>'Query',
     'fields'=>[
         'Artistas'=>[
-            'type'=>Type::listOf($AlbumType),
+            'type'=>Type::listOf($ArtistaType),
             'resolve'=>function($root,$args){
                 $data=Artista::get()->toArray();
                 return $data;
