@@ -8,7 +8,7 @@ class Albun extends Model{
     public $timestamps=false;
     protected $fillable = ['ID','Gestion','Foto','Artista'];
     public function foto() {
-        return $this->hasOne(Foto::class,'ID','Trabajador');
+        return $this->hasOne(Foto::class,'ID','Foto');
     }
     public function artista() {
         return $this->hasOne(Artista::class,'ID','Artista');
