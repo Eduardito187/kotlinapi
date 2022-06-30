@@ -50,5 +50,40 @@ $Mutacion=[
             return Artista::where('Nombre', $args['Nombre'])->first();
         }
     ],
+    'EditArtista'=>[
+        'type'=>$ArtistaType,
+        'args'=>[
+            'ID'=>Type::nonNull(Type::int()),
+            'Nombre'=>Type::string(),
+            'Alias'=>Type::string()
+        ],
+        'resolve'=>function($root,$args){
+            $a=Artista::find($args['ID']);
+            $v=false;
+            if ($a!=null) {
+                Artista::where('ID', $args['ID'])->update([
+                    'Nombre'=>isset($args["Nombre"])?$args["Nombre"]:$a->Nombre,
+                    'Alias'=>isset($args["Alias"])?$args["Alias"]:$a->Alias
+                ]);
+                $v=true;
+            }
+            return Artista::find($args["ID"]);
+        }
+    ],
+    'DelArtista' => [
+        'type' => $ArtistaType,
+        'args' => [
+            'ID' => Type::nonNull(Type::int())
+        ],
+        'resolve' => function($root, $args) {
+            $a = Artista::find($args['ID']);
+            $v=false;
+            if ($a!=null) {
+                Artista::where('ID', $args['ID'])->delete();
+                $v=true;
+            }
+            return $a;
+        }
+    ],
 ];
 ?>
