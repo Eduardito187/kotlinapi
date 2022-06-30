@@ -47,7 +47,7 @@ $Mutacion=[
                 'Foto'=>1
             ]);
             $x=$data->save();
-            return $data->toArray();
+            return Artista::where('Nombre', $args['Nombre'])->first();
         }
     ],
 ];
