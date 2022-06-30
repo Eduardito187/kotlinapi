@@ -52,6 +52,7 @@ $AlbumType=new ObjectType([
     'fields' => function () use(&$FotoType,&$ArtistaType){
         return [
             'ID'=>Type::int(),
+            'Nombre'=>Type::string(),
             'Gesion'=>Type::string(),
             'Foto'=>[
                 "type" => $FotoType,

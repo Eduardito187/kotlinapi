@@ -6,7 +6,7 @@ use App\Models\Artista;
 class Albun extends Model{
     protected $table="albun";
     public $timestamps=false;
-    protected $fillable = ['ID','Gestion','Foto','Artista'];
+    protected $fillable = ['ID','Nombre','Gestion','Foto','Artista'];
     public function foto() {
         return $this->hasOne(Foto::class,'ID','Foto');
     }

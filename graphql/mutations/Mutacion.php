@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Artista;
+use App\Models\Albun;
 use GraphQL\Type\Definition\Type;
 
 function getUserIp(){
@@ -80,6 +81,61 @@ $Mutacion=[
             $v=false;
             if ($a!=null) {
                 Artista::where('ID', $args['ID'])->delete();
+                $v=true;
+            }
+            return $a;
+        }
+    ],
+    'AddAlbun'=>[
+        'type'=>$AlbumType,
+        'args'=>[
+            'Nombre'=>Type::nonNull(Type::string()),
+            'Gestion'=>Type::nonNull(Type::string()),
+            'Artista'=>Type::nonNull(Type::int()),
+            'Foto'=>Type::nonNull(Type::int())
+        ],
+        'resolve'=>function($root,$args){
+            $data=new Albun([
+                'ID'=>NULL,
+                'Nombre'=>$args["Nombre"],
+                'Gestion'=>$args["Gestion"],
+                'Artista'=>$args["Artista"],
+                'Foto'=>$args["Foto"]
+            ]);
+            $x=$data->save();
+            return Albun::where('Nombre', $args['Nombre'])->first();
+        }
+    ],
+    'EditAlbun'=>[
+        'type'=>$AlbumType,
+        'args'=>[
+            'ID'=>Type::nonNull(Type::int()),
+            'Nombre'=>Type::string(),
+            'Gestion'=>Type::string()
+        ],
+        'resolve'=>function($root,$args){
+            $a=Albun::find($args['ID']);
+            $v=false;
+            if ($a!=null) {
+                Albun::where('ID', $args['ID'])->update([
+                    'Nombre'=>isset($args["Nombre"])?$args["Nombre"]:$a->Nombre,
+                    'Gestion'=>isset($args["Gestion"])?$args["Gestion"]:$a->Gestion
+                ]);
+                $v=true;
+            }
+            return Albun::find($args["ID"]);
+        }
+    ],
+    'DelAlbun' => [
+        'type' => $ArtistaType,
+        'args' => [
+            'ID' => Type::nonNull(Type::int())
+        ],
+        'resolve' => function($root, $args) {
+            $a = Albun::find($args['ID']);
+            $v=false;
+            if ($a!=null) {
+                Albun::where('ID', $args['ID'])->delete();
                 $v=true;
             }
             return $a;
