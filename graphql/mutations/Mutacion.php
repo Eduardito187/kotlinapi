@@ -1,4 +1,6 @@
 <?php
+
+use App\Models\Artista;
 use GraphQL\Type\Definition\Type;
 
 function getUserIp(){
@@ -28,6 +30,24 @@ $Mutacion=[
         ],
         'resolve'=>function($root,$args){
             return 1;
+        }
+    ],
+    'AddArtista'=>[
+        'type'=>$ArtistaType,
+        'args'=>[
+            'Nombre'=>Type::nonNull(Type::string()),
+            'Alias'=>Type::nonNull(Type::string()),
+            'URL'=>Type::nonNull(Type::string())
+        ],
+        'resolve'=>function($root,$args){
+            $data=new Artista([
+                'ID'=>NULL,
+                'Nombre'=>$args["Nombre"],
+                'Alias'=>$args["Alias"],
+                'Foto'=>1
+            ]);
+            $x=$data->save();
+            return $data->toArray();
         }
     ],
 ];
