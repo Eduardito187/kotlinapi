@@ -2,6 +2,7 @@
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use App\Models\Artista;
+use App\Models\Albun;
 $rootQuery=new ObjectType([
     'name'=>'Query',
     'fields'=>[
@@ -19,6 +20,23 @@ $rootQuery=new ObjectType([
             ],
             'resolve'=>function($root,$args){
                 $data=Artista::find($args["ID"])->toArray();
+                return $data;
+            }
+        ],
+        'Albunes'=>[
+            'type'=>Type::listOf($AlbumType),
+            'resolve'=>function($root,$args){
+                $data=Albun::get()->toArray();
+                return $data;
+            }
+        ],
+        'Albun'=>[
+            'type'=>$AlbumType,
+            'args'=>[
+                'ID'=>Type::nonNull(Type::int())
+            ],
+            'resolve'=>function($root,$args){
+                $data=Albun::find($args["ID"])->toArray();
                 return $data;
             }
         ],
