@@ -12,6 +12,16 @@ $rootQuery=new ObjectType([
                 return $data;
             }
         ],
+        'Artista'=>[
+            'type'=>$ArtistaType,
+            'args'=>[
+                'ID'=>Type::nonNull(Type::int())
+            ],
+            'resolve'=>function($root,$args){
+                $data=Artista::find($args["ID"])->toArray();
+                return $data;
+            }
+        ],
     ]
 ]);
 ?>
