@@ -4,6 +4,7 @@ use GraphQL\Type\Definition\Type;
 use App\Models\Artista;
 use App\Models\Albun;
 use App\Models\Cancion;
+use App\Models\PlayList;
 $rootQuery=new ObjectType([
     'name'=>'Query',
     'fields'=>[
@@ -55,6 +56,23 @@ $rootQuery=new ObjectType([
             ],
             'resolve'=>function($root,$args){
                 $data=Cancion::find($args["ID"])->toArray();
+                return $data;
+            }
+        ],
+        'PlayList'=>[
+            'type'=>Type::listOf($CancionType),
+            'resolve'=>function($root,$args){
+                $data=PlayList::get()->toArray();
+                return $data;
+            }
+        ],
+        'PlayLists'=>[
+            'type'=>$CancionType,
+            'args'=>[
+                'ID'=>Type::nonNull(Type::int())
+            ],
+            'resolve'=>function($root,$args){
+                $data=PlayList::find($args["ID"])->toArray();
                 return $data;
             }
         ],

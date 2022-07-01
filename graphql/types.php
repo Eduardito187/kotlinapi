@@ -4,6 +4,7 @@ use GraphQL\Type\Definition\Type;
 use App\Models\Artista;
 use App\Models\Albun;
 use App\Models\Cancion;
+use App\Models\CancionPlayList;
 
 $PlayListType=new ObjectType([
     'name' => 'PlayListType',
@@ -17,11 +18,33 @@ $PlayListType=new ObjectType([
 $CancionPlayListType=new ObjectType([
     'name' => 'CancionPlayListType',
     'description' => 'CancionPlayListType',
-    'fields'=>[
-        'ID'=>Type::int(),
-        'Cancion'=>Type::int(),
-        'PlayList'=>Type::int()
-    ]
+    'fields' => function () use(&$CancionType,&$PlayListType){
+        return [
+            'ID'=>Type::int(),
+            'Cancion'=>[
+                "type" => $CancionType,
+                "resolve" => function ($root, $args) {
+                    $idPer = $root['ID'];
+                    $data = CancionPlayList::where('ID', $idPer)->with(['cancion'])->first();
+                    if ($data->cancion==null) {
+                        return null;
+                    }
+                    return $data->cancion->toArray();
+                }
+            ],
+            'PlayList'=>[
+                "type" => $PlayListType,
+                "resolve" => function ($root, $args) {
+                    $idPer = $root['ID'];
+                    $data = CancionPlayList::where('ID', $idPer)->with(['play_list'])->first();
+                    if ($data->play_list==null) {
+                        return null;
+                    }
+                    return $data->play_list->toArray();
+                }
+            ],
+        ];
+    }
 ]);
 $CancionType=new ObjectType([
     'name' => 'CancionType',
