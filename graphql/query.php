@@ -59,15 +59,18 @@ $rootQuery=new ObjectType([
                 return $data;
             }
         ],
-        'PlayList'=>[
+        'PlayLists'=>[
             'type'=>Type::listOf($CancionType),
             'resolve'=>function($root,$args){
                 $data=PlayList::get()->toArray();
                 return $data;
             }
         ],
-        'PlayLists'=>[
+        'PlayList'=>[
             'type'=>$CancionType,
+            'args'=>[
+                'ID'=>Type::nonNull(Type::int())
+            ],
             'resolve'=>function($root,$args){
                 $data=PlayList::find($args["ID"])->toArray();
                 return $data;
