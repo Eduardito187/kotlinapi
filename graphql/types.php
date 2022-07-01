@@ -4,16 +4,30 @@ use GraphQL\Type\Definition\Type;
 use App\Models\Artista;
 use App\Models\Albun;
 use App\Models\Cancion;
+use App\Models\PlayList;
 use App\Models\CancionPlayList;
 
 $PlayListType=new ObjectType([
     'name' => 'PlayListType',
     'description' => 'PlayListType',
-    'fields'=>[
-        'ID'=>Type::int(),
-        'Nombre'=>Type::string(),
-        'Prioridad'=>Type::int()
-    ]
+    'fields' => function () use(&$CancionPlayListType){
+        return [
+            'ID'=>Type::int(),
+            'Nombre'=>Type::string(),
+            'Prioridad'=>Type::int(),
+            'Musicas'=>[
+                "type" => Type::listOf($CancionPlayListType),
+                "resolve" => function ($root, $args) {
+                    $idPer = $root['ID'];
+                    $data = PlayList::where('ID', $idPer)->with(['play_list'])->first();
+                    if ($data->play_list==null) {
+                        return null;
+                    }
+                    return $data->play_list->toArray();
+                }
+            ]
+        ];
+    }
 ]);
 $CancionPlayListType=new ObjectType([
     'name' => 'CancionPlayListType',
