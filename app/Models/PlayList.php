@@ -3,7 +3,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\CancionPlayList;
 class PlayList extends Model{
-    protected $table="paly_list";
+    protected $table="play_list";
     public $timestamps=false;
     protected $fillable = ['ID','Nombre','Prioridad'];
     public function play_list() {
