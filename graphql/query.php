@@ -3,6 +3,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use App\Models\Artista;
 use App\Models\Albun;
+use App\Models\Cancion;
 $rootQuery=new ObjectType([
     'name'=>'Query',
     'fields'=>[
@@ -37,6 +38,23 @@ $rootQuery=new ObjectType([
             ],
             'resolve'=>function($root,$args){
                 $data=Albun::find($args["ID"])->toArray();
+                return $data;
+            }
+        ],
+        'Musicas'=>[
+            'type'=>Type::listOf($CancionType),
+            'resolve'=>function($root,$args){
+                $data=Cancion::get()->toArray();
+                return $data;
+            }
+        ],
+        'Musica'=>[
+            'type'=>$CancionType,
+            'args'=>[
+                'ID'=>Type::nonNull(Type::int())
+            ],
+            'resolve'=>function($root,$args){
+                $data=Cancion::find($args["ID"])->toArray();
                 return $data;
             }
         ],

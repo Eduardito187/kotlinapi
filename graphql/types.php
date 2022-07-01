@@ -3,6 +3,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use App\Models\Artista;
 use App\Models\Albun;
+use App\Models\Cancion;
 
 $PlayListType=new ObjectType([
     'name' => 'PlayListType',
@@ -25,16 +26,38 @@ $CancionPlayListType=new ObjectType([
 $CancionType=new ObjectType([
     'name' => 'CancionType',
     'description' => 'CancionType',
-    'fields'=>[
-        'ID'=>Type::int(),
-        'Nombre'=>Type::string(),
-        'Imagen'=>Type::int(),
-        'Pista'=>Type::string(),
-        'Url_Cancion'=>Type::string(),
-        'Conteo'=>Type::int(),
-        'Letra'=>Type::string(),
-        'Album'=>Type::string()
-    ]
+    'fields' => function () use(&$FotoType,&$AlbumType){
+        return [
+            'ID'=>Type::int(),
+            'Nombre'=>Type::string(),
+            'Imagen'=>[
+                "type" => $FotoType,
+                "resolve" => function ($root, $args) {
+                    $idPer = $root['ID'];
+                    $data = Cancion::where('ID', $idPer)->with(['foto'])->first();
+                    if ($data->foto==null) {
+                        return null;
+                    }
+                    return $data->foto->toArray();
+                }
+            ],
+            'Pista'=>Type::string(),
+            'Url_Cancion'=>Type::string(),
+            'Conteo'=>Type::int(),
+            'Letra'=>Type::string(),
+            'Album'=>[
+                "type" => $AlbumType,
+                "resolve" => function ($root, $args) {
+                    $idPer = $root['ID'];
+                    $data = Cancion::where('ID', $idPer)->with(['albun'])->first();
+                    if ($data->albun==null) {
+                        return null;
+                    }
+                    return $data->albun->toArray();
+                }
+            ],
+        ];
+    }
 ]);
 
 $FotoType=new ObjectType([
@@ -53,7 +76,7 @@ $AlbumType=new ObjectType([
         return [
             'ID'=>Type::int(),
             'Nombre'=>Type::string(),
-            'Gesion'=>Type::string(),
+            'Gestion'=>Type::int(),
             'Foto'=>[
                 "type" => $FotoType,
                 "resolve" => function ($root, $args) {
