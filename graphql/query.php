@@ -60,14 +60,14 @@ $rootQuery=new ObjectType([
             }
         ],
         'PlayLists'=>[
-            'type'=>Type::listOf($CancionType),
+            'type'=>Type::listOf($PlayListType),
             'resolve'=>function($root,$args){
                 $data=PlayList::get()->toArray();
                 return $data;
             }
         ],
         'PlayList'=>[
-            'type'=>$CancionType,
+            'type'=>$PlayListType,
             'args'=>[
                 'ID'=>Type::nonNull(Type::int())
             ],
