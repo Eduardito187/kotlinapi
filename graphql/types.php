@@ -135,7 +135,18 @@ $AlbumType=new ObjectType([
                     }
                     return $data->artista->toArray();
                 }
-            ]
+            ],
+            'Canciones'=>[
+                "type" => Type::listOf($CancionType),
+                "resolve" => function ($root, $args) {
+                    $idPer = $root['ID'];
+                    $data = Albun::where('ID', $idPer)->with(['canciones'])->first();
+                    if ($data->canciones==null) {
+                        return null;
+                    }
+                    return $data->canciones->toArray();
+                }
+            ],
         ];
     }
 ]);
